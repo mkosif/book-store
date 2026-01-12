@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.hmosdemos.booksample",
+    "bundleName": "com.hmosdemos.wearable.book_store",
     "vendor": "hmosdemos",
     "versionCode": 1000000,
     "versionName": "1.0.0",

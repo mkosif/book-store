@@ -7,9 +7,9 @@ This project is a wearable watch application built for **HarmonyOS NEXT** wearab
 # Preview
 
 <div>
-   <img src="./screenshots/splashoutput.png" width="25%"/>
-   <img src="./screenshots/booksoutput.png" width="25%"/>
-   <img src="./screenshots/detailoutput.png" width="25%"/>
+<img src="./screenshots/splashoutput.png" width="25%"/>
+<img src="./screenshots/booksoutput.png" width="25%"/>
+<img src="./screenshots/detailoutput.png" width="25%"/>
 </div>
 
 # Use Cases
@@ -76,5 +76,5 @@ entry/src/main/ets/
 
 # License
 
-**BookStore** is distributed under the terms of the MIT License
+BookStore is distributed under the terms of the MIT License
 See the [LICENSE](./LICENSE) for more information.

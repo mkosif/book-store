@@ -38,9 +38,9 @@ struct HomePage {
               console.error('Still no books available after fetch!');
               return;
             }
-            const randomIndex = Math.floor(Math.random() * this.viewModel.allBooks.length);
+            const randomIndex = new Date().getTime() % this.viewModel.allBooks.length;
             this.currentBook = this.viewModel.allBooks[randomIndex];
-            console.log('Random Book:', JSON.stringify(this.currentBook));
+            console.info('Random Book:', JSON.stringify(this.currentBook));
 
             this.pathStack?.pushPath({
               name: 'BookOfDayPage',

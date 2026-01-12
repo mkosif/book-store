@@ -11,7 +11,7 @@ export class HomeViewModel {
     $r('app.string.choosebooks'),
     $r('app.string.catchme'),
     $r('app.string.nicetry'),
-    $r('app.string.oopss'),
+    $r('app.string.oopss')
   ]
   allBooks: BookModel[] = []
   currentBook: BookModel | null = null;
@@ -30,19 +30,14 @@ export class HomeViewModel {
   escape() {
     let newX = this.randomOffset(-60, 60)
     let newY = this.randomOffset(-70, 70)
-
-    animateTo({ duration: 50, curve: Curve.EaseInOut }, () => {
-      this.offsetX = newX
-      this.offsetY = newY
-    })
   }
 
   randomOffset(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min
+    return (Date.now() % (max - min + 1)) + min;
   }
 
   getRandomResponse(): ResourceStr {
-    let index = Math.floor(Math.random() * this.responses.length)
+    let index = Date.now() % this.responses.length;
     return this.responses[index]
   }
 

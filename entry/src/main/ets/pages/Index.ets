@@ -46,7 +46,7 @@ struct Index {
               curve: curves.initCurve(),
               iterations: 1,
               duration: 800,
-              playMode: PlayMode.Normal,
+              playMode: PlayMode.Normal
             })
 
           Image($r('app.media.splash'))
@@ -56,7 +56,7 @@ struct Index {
               curve: curves.initCurve(),
               iterations: 1,
               duration: 1000,
-              playMode: PlayMode.Normal,
+              playMode: PlayMode.Normal
             })
         }
         .align(Alignment.Center)
