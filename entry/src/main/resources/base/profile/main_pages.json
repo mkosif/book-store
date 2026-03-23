@@ -4,6 +4,12 @@
     "pages/BooksPage",
     "pages/BookDetailPage",
     "pages/HomePage",
-    "pages/BookOfDayPage"
+    "pages/BookOfDayPage",
+    "pages/SearchPage",
+    "pages/FavoritesPage",
+    "pages/BookHistoryPage",
+    "pages/StatsPage",
+    "pages/RecommendPage",
+    "pages/GoalPage"
   ]
 }

@@ -19,6 +19,36 @@
       "name": "BookOfDayPage",
       "pageSourceFile": "src/main/ets/pages/BookOfDayPage.ets",
       "buildFunction": "BookOfDayPageBuilder"
+    },
+    {
+      "name": "SearchPage",
+      "pageSourceFile": "src/main/ets/pages/SearchPage.ets",
+      "buildFunction": "SearchPageBuilder"
+    },
+    {
+      "name": "FavoritesPage",
+      "pageSourceFile": "src/main/ets/pages/FavoritesPage.ets",
+      "buildFunction": "FavoritesPageBuilder"
+    },
+    {
+      "name": "BookHistoryPage",
+      "pageSourceFile": "src/main/ets/pages/BookHistoryPage.ets",
+      "buildFunction": "BookHistoryPageBuilder"
+    },
+    {
+      "name": "StatsPage",
+      "pageSourceFile": "src/main/ets/pages/StatsPage.ets",
+      "buildFunction": "StatsPageBuilder"
+    },
+    {
+      "name": "RecommendPage",
+      "pageSourceFile": "src/main/ets/pages/RecommendPage.ets",
+      "buildFunction": "RecommendPageBuilder"
+    },
+    {
+      "name": "GoalPage",
+      "pageSourceFile": "src/main/ets/pages/GoalPage.ets",
+      "buildFunction": "GoalPageBuilder"
     }
   ]
 }
