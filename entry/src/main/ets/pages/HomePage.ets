@@ -1,9 +1,5 @@
 import BookModel from '../model/BookModel';
 import { HomeViewModel } from '../viewmodel/HomeViewModel';
-import { BooksPageBuilder } from './BooksPage';
-import { FavoritesPageBuilder } from './FavoritesPage';
-import { StatsPageBuilder } from './StatsPage';
-import { ThemeService } from '../model/ThemeService';
 
 @Builder
 export function HomePageBuilder() {
@@ -15,98 +11,111 @@ export function HomePageBuilder() {
 struct HomePage {
   @State viewModel: HomeViewModel = HomeViewModel.instance;
   @Consume('mainStack') pathStack: NavPathStack;
-  @State currentIndex: number = 0;
-  private controller: TabsController = new TabsController();
+  @State isLoadingBookOfDay: boolean = false;
 
   onPageShow() {
     this.viewModel.fetchBooks(this.getUIContext())
   }
 
+  openBookOfDay() {
+    const book = this.viewModel.getBookOfDay();
+    if (book) {
+      this.pathStack.pushPath({ name: 'BookOfDayPage', param: book });
+      return;
+    }
+    this.isLoadingBookOfDay = true;
+    this.viewModel.fetchBooks(this.getUIContext()).then(() => {
+      this.isLoadingBookOfDay = false;
+      const loaded = this.viewModel.getBookOfDay();
+      if (loaded) {
+        this.pathStack.pushPath({ name: 'BookOfDayPage', param: loaded });
+      }
+    });
+  }
+
   @Builder
-  tabBuilder(title: string, index: number) {
+  navCard(icon: string, label: string, action: () => void) {
     Column() {
-      Text(title)
-        .fontColor(this.currentIndex === index ? Color.Blue : Color.Gray)
-        .fontSize(16)
-        .fontWeight(this.currentIndex === index ? 500 : 400)
-    }.width('100%')
+      Text(icon).fontSize(24)
+      Text(label)
+        .fontSize(10)
+        .fontColor('#CCCCCC')
+        .margin({ top: 4 })
+        .textAlign(TextAlign.Center)
+    }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .width('100%')
+    .height(80)
+    .borderRadius(18)
+    .backgroundColor('#1C1C1C')
+    .onClick(action)
   }
 
   build() {
     NavDestination() {
-      Tabs({ barPosition: BarPosition.End, controller: this.controller }) {
-        TabContent() {
-          Column() {
-            Button($r('app.string.bookofday'))
-              .backgroundColor($r('app.color.pink'))
-              .margin({ bottom: 10 })
-              .onClick(async () => {
-                const book = this.viewModel.getBookOfDay();
-                if (book) {
-                  this.pathStack.pushPath({ name: 'BookOfDayPage', param: book });
-                }
-              })
-
-            Button('Search')
-              .backgroundColor(Color.Blue)
-              .margin({ bottom: 10 })
-              .onClick(() => {
-                this.pathStack.pushPathByName('SearchPage', null)
-              })
-
-            Button('History')
-              .backgroundColor(Color.Orange)
-              .margin({ bottom: 10 })
-              .onClick(() => {
-                this.pathStack.pushPathByName('BookHistoryPage', null)
-              })
-
-            Button('Recommendations')
-              .backgroundColor(Color.Pink)
-              .margin({ bottom: 10 })
-              .onClick(() => {
-                this.pathStack.pushPathByName('RecommendPage', null)
-              })
-
-            Button('Goals')
-              .backgroundColor(Color.Green)
-              .margin({ bottom: 10 })
-              .onClick(() => {
-                this.pathStack.pushPathByName('GoalPage', null)
-              })
-
-            Button(this.viewModel.name)
-              .backgroundColor($r('app.color.gray'))
-              .offset({ x: this.viewModel.offsetX, y: this.viewModel.offsetY })
-              .onTouch((event: TouchEvent) => {
-                if (event.type === TouchType.Down) {
-                  this.viewModel.escape()
-                  this.viewModel.name = this.viewModel.getRandomResponse()
-                }
-              })
+      Column() {
+        Grid() {
+          GridItem() {
+            Column() {
+              if (this.isLoadingBookOfDay) {
+                LoadingProgress().width(28).height(28).color('#CCCCCC')
+              } else {
+                Text('📅').fontSize(24)
+                Text('Book of Day')
+                  .fontSize(10)
+                  .fontColor('#CCCCCC')
+                  .margin({ top: 4 })
+                  .textAlign(TextAlign.Center)
+              }
+            }
+            .justifyContent(FlexAlign.Center)
+            .alignItems(HorizontalAlign.Center)
+            .width('100%')
+            .height(80)
+            .borderRadius(18)
+            .backgroundColor('#1C1C1C')
+            .onClick(() => { this.openBookOfDay() })
           }
-          .justifyContent(FlexAlign.Center)
-          .width('100%')
-          .height('100%')
-        }.tabBar(this.tabBuilder('Home', 0))
-
-        TabContent() {
-          BooksPageBuilder()
-        }.tabBar(this.tabBuilder('Books', 1))
-
-        TabContent() {
-          FavoritesPageBuilder()
-        }.tabBar(this.tabBuilder('Favorites', 2))
-
-        TabContent() {
-          StatsPageBuilder()
-        }.tabBar(this.tabBuilder('Stats', 3))
+          GridItem() {
+            this.navCard('📚', 'Books', () => {
+              this.pathStack.pushPathByName('BooksPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('🔍', 'Search', () => {
+              this.pathStack.pushPathByName('SearchPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('⭐', 'Favorites', () => {
+              this.pathStack.pushPathByName('FavoritesPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('🕐', 'History', () => {
+              this.pathStack.pushPathByName('BookHistoryPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('📊', 'Stats', () => {
+              this.pathStack.pushPathByName('StatsPage', null)
+            })
+          }
+        }
+        .columnsTemplate('1fr 1fr')
+        .columnsGap(10)
+        .rowsGap(10)
+        .width('72%')
+        .scrollBar(BarState.Off)
       }
-      .onChange((index: number) => {
-        this.currentIndex = index
-      })
-      .backgroundColor(ThemeService.getInstance().getBackgroundColor())
+      .width('100%')
+      .height('100%')
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .backgroundColor('#000000')
     }
+    .backgroundColor('#000000')
     .hideBackButton(true)
   }
 }

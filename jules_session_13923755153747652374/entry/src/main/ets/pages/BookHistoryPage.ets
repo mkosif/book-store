@@ -21,33 +21,14 @@ struct BookHistoryPage {
   build() {
     NavDestination() {
       Column() {
-        // Back button
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
-
         if (this.history.length === 0) {
-          Column() {
-            Text('🕐').fontSize(32).margin({ bottom: 12 })
-            Text('No history yet').fontSize(12).fontColor('#666666')
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
+          Text('No history yet.')
+            .fontSize(16)
+            .margin({ top: 20 })
         } else {
-          Scroll() {
-            Column() {
-              ForEach(this.history, (book: BookModel) => {
+          List() {
+            ForEach(this.history, (book: BookModel) => {
+              ListItem() {
                 BookCardComponent({
                   image: book.image,
                   title: book.title,
@@ -56,13 +37,14 @@ struct BookHistoryPage {
                   authors: book.authors,
                   readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
                 })
-                .margin({ bottom: 6 })
                 .onClick(() => {
-                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
+                  this.pathStack.pushPath({
+                    name: 'BookDetailPage',
+                    param: book
+                  })
                 })
-              }, (item: BookModel) => item.title + item.previewLink)
-            }
-            .padding({ left: 12, right: 12, top: 4, bottom: 20 })
+              }
+            }, (item: BookModel) => item.title + item.previewLink)
           }
           .width('100%')
           .layoutWeight(1)
@@ -70,9 +52,8 @@ struct BookHistoryPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor('#000000')
     }
-    .hideTitleBar(true)
-    .backgroundColor('#000000')
+    .title('Recently Viewed')
+    .hideBackButton(false)
   }
 }

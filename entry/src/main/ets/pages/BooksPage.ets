@@ -3,7 +3,6 @@ import { BookViewModel } from '../viewmodel/BookViewModel';
 import BookModel from '../model/BookModel';
 import { FilterComponent } from '../component/FilterComponent';
 import { ReadingStatusService } from '../model/ReadingStatusService';
-import { ThemeService, ThemeMode } from '../model/ThemeService';
 
 @Builder
 export function BooksPageBuilder() {
@@ -13,13 +12,9 @@ export function BooksPageBuilder() {
 @Entry
 @Component
 struct BooksPage {
-  scroller: Scroller = new Scroller()
   @State viewModel: BookViewModel = BookViewModel.instance;
   @Consume('mainStack') pathStack: NavPathStack;
-  @State isGridView: boolean = false
-  @State themeMode: ThemeMode = ThemeService.getInstance().getMode()
 
-  // get  books when open the page
   aboutToAppear() {
     this.viewModel.fetchBooks(this.getUIContext())
   }
@@ -28,24 +23,17 @@ struct BooksPage {
     NavDestination() {
       Column() {
         Row() {
-          Button(this.themeMode === ThemeMode.LIGHT ? '🌙' : '☀️')
-            .onClick(() => {
-              const newMode = this.themeMode === ThemeMode.LIGHT ? ThemeMode.DARK : ThemeMode.LIGHT
-              ThemeService.getInstance().setMode(newMode)
-              this.themeMode = newMode
-            })
-            .backgroundColor(Color.Transparent)
-
-          Blank()
-
-          Button(this.isGridView ? 'List View' : 'Grid View')
-            .onClick(() => {
-              this.isGridView = !this.isGridView
-            })
-            .fontSize(12)
+          Text('‹')
+            .fontSize(26)
+            .fontColor('#FFFFFF')
+            .width(40).height(40)
+            .textAlign(TextAlign.Center)
+            .backgroundColor('#444444')
+            .borderRadius(20)
+            .onClick(() => { this.pathStack.pop() })
         }
         .width('100%')
-        .padding({ left: 10, right: 10 })
+        .padding({ left: 28, top: 12, bottom: 4 })
 
         FilterComponent({
           categories: this.viewModel.categories,
@@ -55,57 +43,33 @@ struct BooksPage {
           }
         })
 
-        Scroll(this.scroller) {
-          if (this.isGridView) {
-            Grid() {
-              ForEach(this.viewModel.filteredBooks, (book: BookModel) => {
-                GridItem() {
-                  BookCardComponent({
-                    image: book.image,
-                    title: book.title,
-                    pageCount: book.pageCount,
-                    categories: book.categories,
-                    authors: book.authors,
-                    readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
-                  })
-                  .onClick(() => {
-                    this.pathStack.pushPath({
-                      name: 'BookDetailPage',
-                      param: book
-                    })
-                  })
-                }
-              }, (item: BookModel) => item.title + item.previewLink)
-            }
-            .columnsTemplate('1fr 1fr')
-            .columnsGap(10)
-            .rowsGap(10)
-            .padding(10)
-          } else {
-            Column() {
-              ForEach(this.viewModel.filteredBooks, (book: BookModel, index: number) => {
-                BookCardComponent({
-                  image: book.image,
-                  title: book.title,
-                  pageCount: book.pageCount,
-                  categories: book.categories,
-                  authors: book.authors,
-                  readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
-                }).padding({ bottom: 4 })
-                  .onClick(() => {
-                    this.pathStack.pushPath({
-                      name: 'BookDetailPage',
-                      param: book
-                    })
-                  })
-                Divider().height(2).color(0xCCCCCC).padding({ left: 40, right: 40, bottom: 10 });
-              }, (item: BookModel) => item.title + item.previewLink)
-            }.padding({ bottom: 15, top: 15 })
+        Scroll() {
+          Column() {
+            ForEach(this.viewModel.filteredBooks, (book: BookModel) => {
+              BookCardComponent({
+                image: book.image,
+                title: book.title,
+                pageCount: book.pageCount,
+                categories: book.categories,
+                authors: book.authors,
+                readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
+              })
+              .margin({ bottom: 6 })
+              .onClick(() => {
+                this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
+              })
+            }, (item: BookModel) => item.title + item.previewLink)
           }
-        }.width('100%').layoutWeight(1)
+          .padding({ left: 12, right: 12, top: 8, bottom: 20 })
+        }
+        .width('100%')
+        .layoutWeight(1)
       }
-      .backgroundColor(ThemeService.getInstance().getBackgroundColor())
+      .width('100%')
+      .height('100%')
+      .backgroundColor('#000000')
     }
-    .hideBackButton(false)
+    .hideTitleBar(true)
+    .backgroundColor('#000000')
   }
 }

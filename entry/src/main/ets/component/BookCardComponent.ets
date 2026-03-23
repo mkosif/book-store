@@ -1,5 +1,4 @@
 import { ImageCacheService } from '../model/ImageCacheService'
-import { ThemeService } from '../model/ThemeService'
 
 @Component
 export struct BookCardComponent {
@@ -11,44 +10,45 @@ export struct BookCardComponent {
   @Prop readingStatus: string | null = null
 
   build() {
-    Column() {
+    Row() {
       Image(ImageCacheService.getInstance().getImage(this.image))
-        .width(60)
-        .height(70)
-        .padding({ bottom: 3 })
+        .width(44)
+        .height(56)
+        .borderRadius(6)
+        .objectFit(ImageFit.Cover)
 
-      Text(this.categories && this.categories.length > 0 ? this.categories.join(', ') : 'No categories')
-        .fontSize(9)
-        .fontColor(ThemeService.getInstance().getTextColor())
-        .padding({ bottom: 3 })
+      Column() {
+        Text(this.title)
+          .fontSize(12)
+          .fontColor('#FFFFFF')
+          .fontWeight(FontWeight.Medium)
+          .maxLines(2)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-      Text(this.title)
-        .fontSize(11)
-        .fontColor(ThemeService.getInstance().getTextColor())
-        .padding({ bottom: 3 })
-
-      Text(this.authors && this.authors.length > 0 ? this.authors.join(', ') : 'Unknown Author')
-        .fontSize(9)
-        .fontColor(ThemeService.getInstance().getTextColor())
-        .padding({ bottom: 3 })
-
-      Text(this.pageCount !== null ? this.pageCount.toString() + ' pages' : 'Page count unknown')
-        .fontSize(9)
-        .fontColor(ThemeService.getInstance().getTextColor())
-        .padding({ bottom: 3 })
-
-      if (this.readingStatus && this.readingStatus !== 'None') {
-        Text(this.readingStatus)
+        Text(this.authors && this.authors.length > 0 ? this.authors[0] : 'Unknown Author')
           .fontSize(10)
-          .fontColor(Color.White)
-          .backgroundColor(Color.Orange)
-          .borderRadius(5)
-          .padding({ left: 5, right: 5 })
+          .fontColor('#888888')
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .margin({ top: 3 })
+
+        if (this.readingStatus && this.readingStatus !== 'None') {
+          Text(this.readingStatus)
+            .fontSize(9)
+            .fontColor('#FFFFFF')
+            .backgroundColor('#1E4DBF')
+            .borderRadius(4)
+            .padding({ left: 5, right: 5, top: 1, bottom: 1 })
+            .margin({ top: 4 })
+        }
       }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+      .padding({ left: 10 })
     }
-    .padding(10)
+    .padding({ left: 12, right: 12, top: 8, bottom: 8 })
     .width('100%')
-    .borderRadius(20)
-    .backgroundColor(ThemeService.getInstance().getCardBackgroundColor())
+    .backgroundColor('#1A1A1A')
+    .borderRadius(12)
   }
 }

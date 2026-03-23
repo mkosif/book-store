@@ -1,7 +1,6 @@
 import { BookCardComponent } from '../component/BookCardComponent';
 import BookModel from '../model/BookModel';
 import { FavoritesService } from '../model/FavoritesService';
-import { ThemeService } from '../model/ThemeService';
 
 @Builder
 export function FavoritesPageBuilder() {
@@ -21,22 +20,36 @@ struct FavoritesPage {
   build() {
     NavDestination() {
       Column() {
-        Text('Favorites')
-          .fontSize(16)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(ThemeService.getInstance().getTextColor())
-          .padding({ top: 10, bottom: 10 })
+        Row() {
+          Text('‹')
+            .fontSize(26)
+            .fontColor('#FFFFFF')
+            .width(40).height(40)
+            .textAlign(TextAlign.Center)
+            .backgroundColor('#444444')
+            .borderRadius(20)
+            .onClick(() => { this.pathStack.pop() })
+        }
+        .width('100%')
+        .padding({ left: 28, top: 12, bottom: 4 })
 
         if (this.favorites.length === 0) {
           Column() {
-            Text('No favorites yet.')
-              .fontSize(13)
-              .fontColor(Color.Gray)
-            Text('Tap ❤️ on any book to save it.')
-              .fontSize(11)
-              .fontColor(Color.Gray)
-              .margin({ top: 5 })
-          }.margin({ top: 30 })
+            Text('⭐')
+              .fontSize(32)
+              .margin({ bottom: 12 })
+            Text('No favorites yet')
+              .fontSize(12)
+              .fontColor('#666666')
+            Text('Tap ❤️ on a book')
+              .fontSize(10)
+              .fontColor('#444444')
+              .margin({ top: 4 })
+          }
+          .width('100%')
+          .layoutWeight(1)
+          .justifyContent(FlexAlign.Center)
+          .alignItems(HorizontalAlign.Center)
         } else {
           Scroll() {
             Column() {
@@ -48,11 +61,13 @@ struct FavoritesPage {
                   categories: book.categories,
                   authors: book.authors
                 })
+                .margin({ bottom: 6 })
                 .onClick(() => {
-                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book });
+                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
               }, (book: BookModel) => book.title + book.previewLink)
-            }.padding({ bottom: 15 })
+            }
+            .padding({ left: 12, right: 12, top: 8, bottom: 20 })
           }
           .width('100%')
           .layoutWeight(1)
@@ -60,9 +75,9 @@ struct FavoritesPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor(ThemeService.getInstance().getBackgroundColor())
+      .backgroundColor('#000000')
     }
-    .title('Favorites')
-    .hideBackButton(false)
+    .hideTitleBar(true)
+    .backgroundColor('#000000')
   }
 }

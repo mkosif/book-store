@@ -7,6 +7,7 @@ export class FavoritesService {
   private favorites: BookModel[] = [];
 
   private constructor() {
+    PersistentStorage.persistProp(FAVORITES_KEY, '');
     this.load();
   }
 

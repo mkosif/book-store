@@ -1,7 +1,6 @@
 import { BookCardComponent } from '../component/BookCardComponent';
 import BookModel from '../model/BookModel';
 import BookService from '../model/BookService';
-import { ThemeService } from '../model/ThemeService';
 
 @Builder
 export function SearchPageBuilder() {
@@ -24,7 +23,6 @@ struct SearchPage {
     try {
       this.results = await BookService.searchBooks(this.getUIContext(), this.query);
     } catch (e) {
-      console.error('SearchPage: search failed:', e);
       this.results = [];
     }
     this.isLoading = false;
@@ -33,34 +31,49 @@ struct SearchPage {
   build() {
     NavDestination() {
       Column() {
+        // Back button
         Row() {
-          TextInput({ placeholder: 'Search books...', text: this.query })
+          Text('‹')
+            .fontSize(26)
+            .fontColor('#FFFFFF')
+            .width(40).height(40)
+            .textAlign(TextAlign.Center)
+            .backgroundColor('#444444')
+            .borderRadius(20)
+            .onClick(() => { this.pathStack.pop() })
+        }
+        .width('100%')
+        .padding({ left: 28, top: 12, bottom: 4 })
+
+        Row() {
+          TextInput({ placeholder: 'Search...', text: this.query })
             .layoutWeight(1)
             .fontSize(12)
-            .onChange((value: string) => {
-              this.query = value;
-            })
-            .onSubmit(() => {
-              this.search();
-            })
-          Button('Go')
-            .onClick(() => { this.search(); })
-            .fontSize(12)
-            .margin({ left: 5 })
+            .fontColor('#FFFFFF')
+            .placeholderColor('#555555')
+            .backgroundColor('#1A1A1A')
+            .borderRadius(10)
+            .onChange((value: string) => { this.query = value })
+            .onSubmit(() => { this.search() })
+
+          Text('🔍')
+            .fontSize(18)
+            .padding({ left: 8 })
+            .onClick(() => { this.search() })
         }
-        .padding({ left: 10, right: 10, top: 10, bottom: 5 })
+        .padding({ left: 16, right: 16, bottom: 8 })
         .width('100%')
 
         if (this.isLoading) {
           LoadingProgress()
-            .height(40)
-            .width(40)
-            .margin({ top: 30 })
+            .width(36).height(36)
+            .color('#4A90E2')
+            .margin({ top: 40 })
         } else if (this.hasSearched && this.results.length === 0) {
-          Text('No results found for "' + this.query + '"')
+          Text('No results')
             .fontSize(12)
-            .fontColor(Color.Gray)
-            .padding(20)
+            .fontColor('#666666')
+            .margin({ top: 40 })
         } else {
           Scroll() {
             Column() {
@@ -72,11 +85,13 @@ struct SearchPage {
                   categories: book.categories,
                   authors: book.authors
                 })
+                .margin({ bottom: 6 })
                 .onClick(() => {
-                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book });
+                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
               }, (book: BookModel) => book.title + book.previewLink)
-            }.padding({ bottom: 15, top: 5 })
+            }
+            .padding({ left: 12, right: 12, bottom: 20 })
           }
           .width('100%')
           .layoutWeight(1)
@@ -84,9 +99,9 @@ struct SearchPage {
       }
       .width('100%')
       .height('100%')
-      .backgroundColor(ThemeService.getInstance().getBackgroundColor())
+      .backgroundColor('#000000')
     }
-    .title('Search Books')
-    .hideBackButton(false)
+    .hideTitleBar(true)
+    .backgroundColor('#000000')
   }
 }

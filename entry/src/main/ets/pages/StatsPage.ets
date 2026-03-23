@@ -1,5 +1,4 @@
 import { StatsService, ReadingStats } from '../model/StatsService';
-import { ThemeService } from '../model/ThemeService';
 
 @Builder
 export function StatsPageBuilder() {
@@ -18,44 +17,64 @@ struct StatsPage {
   build() {
     NavDestination() {
       Column() {
-        Text('Reading Statistics')
-          .fontSize(20)
-          .fontWeight(FontWeight.Bold)
-          .fontColor(ThemeService.getInstance().getTextColor())
-          .margin({ top: 20, bottom: 20 })
-
-        Column() {
-          this.statRow('Total Books Tracked:', this.stats.total.toString())
-          this.statRow('To Read:', this.stats.toRead.toString())
-          this.statRow('Currently Reading:', this.stats.reading.toString())
-          this.statRow('Books Read:', this.stats.read.toString())
+        Row() {
+          Text('‹')
+            .fontSize(26)
+            .fontColor('#FFFFFF')
+            .width(40).height(40)
+            .textAlign(TextAlign.Center)
+            .backgroundColor('#444444')
+            .borderRadius(20)
+            .onClick(() => { this.pathStack.pop() })
         }
-        .width('90%')
-        .backgroundColor(ThemeService.getInstance().getCardBackgroundColor())
-        .borderRadius(15)
-        .padding(20)
+        .width('100%')
+        .padding({ left: 28, top: 12, bottom: 4 })
+
+        Text('📊')
+          .fontSize(28)
+          .margin({ top: 8, bottom: 8 })
+
+        Grid() {
+          GridItem() { this.statCard('📚', 'Total', this.stats.total) }
+          GridItem() { this.statCard('📋', 'To Read', this.stats.toRead) }
+          GridItem() { this.statCard('👁', 'Reading', this.stats.reading) }
+          GridItem() { this.statCard('✅', 'Read', this.stats.read) }
+        }
+        .columnsTemplate('1fr 1fr')
+        .rowsTemplate('1fr 1fr')
+        .columnsGap(8)
+        .rowsGap(8)
+        .width('72%')
+        .aspectRatio(1)
       }
       .width('100%')
       .height('100%')
-      .backgroundColor(ThemeService.getInstance().getBackgroundColor())
+      .alignItems(HorizontalAlign.Center)
+      .backgroundColor('#000000')
     }
-    .title('Stats')
-    .hideBackButton(false)
+    .hideTitleBar(true)
+    .backgroundColor('#000000')
   }
 
   @Builder
-  statRow(label: string, value: string) {
-    Row() {
-      Text(label)
-        .fontSize(16)
-        .fontColor(ThemeService.getInstance().getTextColor())
-      Blank()
-      Text(value)
-        .fontSize(16)
+  statCard(icon: string, label: string, value: number) {
+    Column() {
+      Text(icon).fontSize(18)
+      Text(value.toString())
+        .fontSize(20)
+        .fontColor('#FFFFFF')
         .fontWeight(FontWeight.Bold)
-        .fontColor(ThemeService.getInstance().getTextColor())
+        .margin({ top: 2 })
+      Text(label)
+        .fontSize(9)
+        .fontColor('#666666')
+        .margin({ top: 2 })
     }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
     .width('100%')
-    .padding({ top: 10, bottom: 10 })
+    .height('100%')
+    .backgroundColor('#1A1A1A')
+    .borderRadius(14)
   }
 }

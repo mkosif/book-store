@@ -8,23 +8,23 @@ export struct FilterComponent {
     Scroll() {
       Row() {
         ForEach(this.categories, (category: string) => {
-          Button(category)
+          Text(category)
             .fontSize(10)
-            .backgroundColor(this.selectedCategory === category ? Color.Blue : Color.Gray)
-            .fontColor(Color.White)
-            .borderRadius(15)
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-            .margin({ right: 5 })
+            .fontColor(this.selectedCategory === category ? '#FFFFFF' : '#666666')
+            .backgroundColor(this.selectedCategory === category ? '#2A2A2A' : 'transparent')
+            .borderRadius(10)
+            .padding({ left: 8, right: 8, top: 3, bottom: 3 })
+            .margin({ right: 4 })
             .onClick(() => {
               this.onCategorySelected(category)
             })
         }, (cat: string) => cat)
       }
-      .padding({ left: 5, right: 5 })
+      .padding({ left: 12, right: 12 })
     }
     .scrollable(ScrollDirection.Horizontal)
     .scrollBar(BarState.Off)
     .width('100%')
-    .padding({ top: 5, bottom: 5 })
+    .height(28)
   }
 }

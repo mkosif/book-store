@@ -1,5 +1,5 @@
 import BookModel from '../model/BookModel';
-import BookService from '../model/BookService';
+import { BookViewModel } from './BookViewModel';
 
 @Observed
 export class HomeViewModel {
@@ -50,16 +50,7 @@ export class HomeViewModel {
   }
 
   async fetchBooks(uiContext?: UIContext) {
-    if (!uiContext) {
-      console.error('UIContext is undefined. Cannot fetch books.');
-      return;
-    }
-
-    try {
-      this.allBooks = await BookService.getBooks(uiContext);
-      console.info('HomeViewModel Books:', JSON.stringify(this.allBooks, null, 3));
-    } catch (err) {
-      console.error('Failed to fetch books:', JSON.stringify(err));
-    }
+    await BookViewModel.instance.fetchBooks(uiContext);
+    this.allBooks = BookViewModel.instance.allBooks;
   }
 }

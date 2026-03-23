@@ -13,55 +13,51 @@ export struct BookDetailCard {
   build() {
     Column() {
       Image(this.image)
-        .height(100)
-        .width(120)
-        .borderRadius(10)
+        .height(80)
+        .width(60)
+        .borderRadius(8)
         .objectFit(ImageFit.Contain)
-        .padding({ bottom: 5 })
+        .margin({ bottom: 8 })
 
       Text(this.title)
-        .fontSize(11)
-        .fontColor(Color.Black)
+        .fontSize(12)
+        .fontColor('#FFFFFF')
         .fontWeight(FontWeight.Bold)
-        .padding({ bottom: 2 })
+        .textAlign(TextAlign.Center)
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .padding({ left: 16, right: 16 })
 
       if (this.authors && this.authors.length > 0) {
-        Text(this.authors.join(', '))
-          .fontSize(9)
-          .fontColor(Color.Gray)
-          .padding({ bottom: 2 })
+        Text(this.authors[0])
+          .fontSize(10)
+          .fontColor('#888888')
+          .margin({ top: 4 })
       }
 
-      if (this.publisher || this.publishedDate) {
-        Text([this.publisher, this.publishedDate].filter(s => s).join(' · '))
+      if (this.pageCount > 0) {
+        Text(this.pageCount + ' pages' + (this.language ? '  ·  ' + this.language.toUpperCase() : ''))
           .fontSize(9)
-          .fontColor(Color.Gray)
-          .padding({ bottom: 2 })
-      }
-
-      if (this.pageCount > 0 || this.language) {
-        Text([this.pageCount > 0 ? this.pageCount + ' pages' : '', this.language ? this.language.toUpperCase() : ''].filter(s => s).join(' · '))
-          .fontSize(9)
-          .fontColor(Color.Gray)
-          .padding({ bottom: 4 })
+          .fontColor('#555555')
+          .margin({ top: 2 })
       }
 
       Scroll(this.scroller) {
-        Text(this.description)
-          .fontSize(9)
-          .fontColor(Color.Black)
+        Text(this.description || 'No description.')
+          .fontSize(10)
+          .fontColor('#AAAAAA')
           .textAlign(TextAlign.Center)
+          .padding({ left: 16, right: 16 })
       }
-      .height('40%')
-      .width('75%')
-      .align(Alignment.Center)
-      .scrollBar(BarState.Auto)
-      .padding({ bottom: 15 })
+      .height(80)
+      .width('100%')
+      .margin({ top: 8 })
+      .scrollBar(BarState.Off)
     }
     .alignItems(HorizontalAlign.Center)
-    .backgroundColor('#ffd4c890')
-    .padding({ top: 20, bottom: 15 })
     .width('100%')
     .height('100%')
+    .padding({ top: 12 })
+    .backgroundColor('#000000')
   }
 }
