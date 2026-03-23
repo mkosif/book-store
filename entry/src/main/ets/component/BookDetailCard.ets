@@ -3,6 +3,11 @@ export struct BookDetailCard {
   @Prop image: string
   @Prop title: string
   @Prop description: string
+  @Prop authors: string[] = []
+  @Prop publisher: string = ''
+  @Prop publishedDate: string = ''
+  @Prop pageCount: number = 0
+  @Prop language: string = ''
   scroller: Scroller = new Scroller()
 
   build() {
@@ -19,6 +24,27 @@ export struct BookDetailCard {
         .fontColor(Color.Black)
         .fontWeight(FontWeight.Bold)
         .padding({ bottom: 2 })
+
+      if (this.authors && this.authors.length > 0) {
+        Text(this.authors.join(', '))
+          .fontSize(9)
+          .fontColor(Color.Gray)
+          .padding({ bottom: 2 })
+      }
+
+      if (this.publisher || this.publishedDate) {
+        Text([this.publisher, this.publishedDate].filter(s => s).join(' · '))
+          .fontSize(9)
+          .fontColor(Color.Gray)
+          .padding({ bottom: 2 })
+      }
+
+      if (this.pageCount > 0 || this.language) {
+        Text([this.pageCount > 0 ? this.pageCount + ' pages' : '', this.language ? this.language.toUpperCase() : ''].filter(s => s).join(' · '))
+          .fontSize(9)
+          .fontColor(Color.Gray)
+          .padding({ bottom: 4 })
+      }
 
       Scroll(this.scroller) {
         Text(this.description)

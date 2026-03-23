@@ -62,7 +62,7 @@
     },
     {
       "name": "url",
-      "value": ".com/books/v1/volumes?q=api&fields=items(volumeInfo/title,volumeInfo/pageCount,volumeInfo/imageLinks/smallThumbnail,volumeInfo/description,volumeInfo/categories)&key=YOUR_GOOGLE_BOOKS_API_KEY_HERE"
+      "value": ".com/books/v1/volumes?q=api&fields=items(volumeInfo/title,volumeInfo/pageCount,volumeInfo/imageLinks/smallThumbnail,volumeInfo/description,volumeInfo/categories,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/publisher,volumeInfo/previewLink,volumeInfo/language)&key=YOUR_GOOGLE_BOOKS_API_KEY_HERE"
     }
   ]
 }

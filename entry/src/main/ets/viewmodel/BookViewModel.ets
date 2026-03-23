@@ -5,6 +5,9 @@ import BookService from '../model/BookService';
 export class BookViewModel {
   private static _instance: BookViewModel;
   allBooks: BookModel[] = []
+  filteredBooks: BookModel[] = []
+  categories: string[] = []
+  selectedCategory: string = 'All'
 
   private constructor() {
   }
@@ -25,8 +28,35 @@ export class BookViewModel {
     try {
       this.allBooks = await BookService.getBooks(uiContext);
       console.info('BookViewModel Books:', JSON.stringify(this.allBooks, null, 3))
+      this.updateCategories();
+      this.applyFilter();
     } catch (err) {
       console.error('Failed to fetch books:', JSON.stringify(err))
     }
+  }
+
+  private updateCategories() {
+    const catSet = new Set<string>();
+    this.allBooks.forEach(book => {
+      if (book.categories) {
+        book.categories.forEach(cat => catSet.add(cat));
+      }
+    });
+    this.categories = ['All', ...Array.from(catSet)];
+  }
+
+  private applyFilter() {
+    if (this.selectedCategory === 'All') {
+      this.filteredBooks = [...this.allBooks];
+    } else {
+      this.filteredBooks = this.allBooks.filter(b =>
+        b.categories && b.categories.includes(this.selectedCategory)
+      );
+    }
+  }
+
+  selectCategory(category: string) {
+    this.selectedCategory = category;
+    this.applyFilter();
   }
 }

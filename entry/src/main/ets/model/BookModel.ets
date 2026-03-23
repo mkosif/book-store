@@ -3,5 +3,10 @@ export default interface BookModel {
   pageCount: number;
   image: string;
   description: string;
-  categories: [];
+  categories: string[];
+  authors: string[];
+  publishedDate: string;
+  publisher: string;
+  previewLink: string;
+  language: string;
 }

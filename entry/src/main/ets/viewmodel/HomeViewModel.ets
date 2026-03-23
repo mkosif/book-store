@@ -28,8 +28,16 @@ export class HomeViewModel {
   }
 
   escape() {
-    let newX = this.randomOffset(-60, 60)
-    let newY = this.randomOffset(-70, 70)
+    this.offsetX = this.randomOffset(-60, 60)
+    this.offsetY = this.randomOffset(-70, 70)
+  }
+
+  getBookOfDay(): BookModel | null {
+    if (this.allBooks.length === 0) return null;
+    const today = new Date();
+    const dateHash = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const index = dateHash % this.allBooks.length;
+    return this.allBooks[index];
   }
 
   randomOffset(min: number, max: number): number {
