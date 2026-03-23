@@ -1,4 +1,11 @@
-import { ReadingStatus } from './ReadingStatusService';
+import { ReadingStatus, ReadingStatusService } from './ReadingStatusService';
+
+export interface ReadingStats {
+  toRead: number;
+  reading: number;
+  read: number;
+  total: number;
+}
 
 export class StatsService {
   private static instance: StatsService;
@@ -12,28 +19,19 @@ export class StatsService {
     return StatsService.instance;
   }
 
-  getReadingStats() {
-    let statusMapSaved = AppStorage.get<string>('ReadingStatusMap');
-    let stats = {
-      toRead: 0,
-      reading: 0,
-      read: 0,
-      total: 0
-    };
-
-    if (statusMapSaved) {
-      try {
-        let obj = JSON.parse(statusMapSaved);
-        Object.values(obj).forEach(status => {
-          stats.total++;
-          if (status === ReadingStatus.TO_READ) stats.toRead++;
-          else if (status === ReadingStatus.READING) stats.reading++;
-          else if (status === ReadingStatus.READ) stats.read++;
-        });
-      } catch (e) {
-        console.error('Failed to parse stats');
+  getReadingStats(): ReadingStats {
+    const statusMap = ReadingStatusService.getInstance().getAllStatuses();
+    const stats: ReadingStats = { toRead: 0, reading: 0, read: 0, total: 0 };
+    statusMap.forEach((status: ReadingStatus) => {
+      stats.total++;
+      if (status === ReadingStatus.TO_READ) {
+        stats.toRead++;
+      } else if (status === ReadingStatus.READING) {
+        stats.reading++;
+      } else if (status === ReadingStatus.READ) {
+        stats.read++;
       }
-    }
+    });
     return stats;
   }
 }

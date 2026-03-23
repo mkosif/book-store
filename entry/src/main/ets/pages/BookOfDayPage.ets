@@ -15,7 +15,12 @@ export struct BookOfDayPage {
     pageCount: 0,
     image: '',
     description: '',
-    categories: []
+    categories: [],
+    authors: [],
+    publishedDate: '',
+    publisher: '',
+    previewLink: '',
+    language: ''
   }
 
   aboutToAppear(): void {

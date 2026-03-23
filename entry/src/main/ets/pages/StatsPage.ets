@@ -1,4 +1,4 @@
-import { StatsService } from '../model/StatsService';
+import { StatsService, ReadingStats } from '../model/StatsService';
 import { ThemeService } from '../model/ThemeService';
 
 @Builder
@@ -9,7 +9,7 @@ export function StatsPageBuilder() {
 @Entry
 @Component
 struct StatsPage {
-  @State stats: { toRead: number, reading: number, read: number, total: number } = { toRead: 0, reading: 0, read: 0, total: 0 }
+  @State stats: ReadingStats = { toRead: 0, reading: 0, read: 0, total: 0 }
 
   aboutToAppear() {
     this.stats = StatsService.getInstance().getReadingStats();

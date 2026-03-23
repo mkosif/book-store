@@ -1,6 +1,6 @@
 export class NotesService {
   private static instance: NotesService;
-  private notesMap: Map<string, string> = new Map();
+  private notesMap: Record<string, string> = {};
 
   private constructor() {
     this.loadFromStorage();
@@ -14,11 +14,10 @@ export class NotesService {
   }
 
   private loadFromStorage() {
-    let saved = AppStorage.get<string>('BookNotesMap');
+    const saved = AppStorage.get<string>('BookNotesMap');
     if (saved) {
       try {
-        let obj = JSON.parse(saved);
-        this.notesMap = new Map(Object.entries(obj));
+        this.notesMap = JSON.parse(saved) as Record<string, string>;
       } catch (e) {
         console.error('Failed to parse BookNotesMap');
       }
@@ -26,19 +25,24 @@ export class NotesService {
   }
 
   private saveToStorage() {
-    let obj = Object.fromEntries(this.notesMap);
-    AppStorage.setOrCreate('BookNotesMap', JSON.stringify(obj));
+    AppStorage.setOrCreate('BookNotesMap', JSON.stringify(this.notesMap));
   }
 
   getNote(bookTitle: string): string {
-    return this.notesMap.get(bookTitle) ?? '';
+    return this.notesMap[bookTitle] ?? '';
   }
 
   setNote(bookTitle: string, note: string) {
     if (note.trim() === '') {
-      this.notesMap.delete(bookTitle);
+      const newMap: Record<string, string> = {};
+      for (let key in this.notesMap) {
+        if (key !== bookTitle) {
+          newMap[key] = this.notesMap[key];
+        }
+      }
+      this.notesMap = newMap;
     } else {
-      this.notesMap.set(bookTitle, note);
+      this.notesMap[bookTitle] = note;
     }
     this.saveToStorage();
   }

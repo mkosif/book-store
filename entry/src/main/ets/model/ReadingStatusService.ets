@@ -26,10 +26,10 @@ export class ReadingStatusService {
     const stored = AppStorage.get<string>(READING_STATUS_KEY);
     if (stored) {
       try {
-        const obj = JSON.parse(stored) as Record<string, string>;
-        Object.keys(obj).forEach(key => {
+        const obj: Record<string, string> = JSON.parse(stored) as Record<string, string>;
+        for (let key in obj) {
           this.statusMap.set(key, obj[key] as ReadingStatus);
-        });
+        }
       } catch (e) {
         console.error('ReadingStatusService: failed to load:', e);
       }
@@ -38,7 +38,7 @@ export class ReadingStatusService {
 
   private save() {
     const obj: Record<string, string> = {};
-    this.statusMap.forEach((value, key) => {
+    this.statusMap.forEach((value: ReadingStatus, key: string) => {
       obj[key] = value;
     });
     AppStorage.setOrCreate(READING_STATUS_KEY, JSON.stringify(obj));

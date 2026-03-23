@@ -42,6 +42,12 @@ struct BookDetailPage {
     this.currentBookIndex = BookViewModel.instance.filteredBooks.findIndex(b => b.title === this.book.title)
   }
 
+  getStatusIndex(status: ReadingStatus): number {
+    const statuses: ReadingStatus[] = [ReadingStatus.NONE, ReadingStatus.TO_READ, ReadingStatus.READING, ReadingStatus.READ];
+    const idx = statuses.indexOf(status);
+    return idx >= 0 ? idx : 0;
+  }
+
   updateState() {
     this.readingStatus = ReadingStatusService.getInstance().getStatus(this.book.title)
     this.isFavorite = FavoritesService.getInstance().isFavorite(this.book.title)
@@ -90,7 +96,7 @@ struct BookDetailPage {
           .fontSize(14)
           .margin({ right: 10 })
         Select([{ value: ReadingStatus.NONE }, { value: ReadingStatus.TO_READ }, { value: ReadingStatus.READING }, { value: ReadingStatus.READ }])
-          .selected(Object.values(ReadingStatus).indexOf(ReadingStatusService.getInstance().getStatus(book.title)))
+          .selected(this.getStatusIndex(ReadingStatusService.getInstance().getStatus(book.title)))
           .onSelect((index: number, value: string) => {
             ReadingStatusService.getInstance().setStatus(book.title, value as ReadingStatus)
             this.readingStatus = value as ReadingStatus

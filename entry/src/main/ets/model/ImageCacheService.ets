@@ -1,6 +1,6 @@
 export class ImageCacheService {
   private static instance: ImageCacheService;
-  private cache: Map<string, string> = new Map();
+  private cache: Record<string, string> = {};
 
   private constructor() {
     this.loadFromStorage();
@@ -14,11 +14,10 @@ export class ImageCacheService {
   }
 
   private loadFromStorage() {
-    let saved = AppStorage.get<string>('ImageCacheMap');
+    const saved = AppStorage.get<string>('ImageCacheMap');
     if (saved) {
       try {
-        let obj = JSON.parse(saved);
-        this.cache = new Map(Object.entries(obj));
+        this.cache = JSON.parse(saved) as Record<string, string>;
       } catch (e) {
         console.error('Failed to parse ImageCacheMap');
       }
@@ -26,16 +25,15 @@ export class ImageCacheService {
   }
 
   private saveToStorage() {
-    let obj = Object.fromEntries(this.cache);
-    AppStorage.setOrCreate('ImageCacheMap', JSON.stringify(obj));
+    AppStorage.setOrCreate('ImageCacheMap', JSON.stringify(this.cache));
   }
 
   getImage(url: string): string {
-    return this.cache.get(url) ?? url;
+    return this.cache[url] ?? url;
   }
 
   cacheImage(url: string, localPath: string) {
-    this.cache.set(url, localPath);
+    this.cache[url] = localPath;
     this.saveToStorage();
   }
 }
