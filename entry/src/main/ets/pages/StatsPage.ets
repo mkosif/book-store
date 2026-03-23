@@ -8,6 +8,7 @@ export function StatsPageBuilder() {
 @Entry
 @Component
 struct StatsPage {
+  @Consume('mainStack') pathStack: NavPathStack;
   @State stats: ReadingStats = { toRead: 0, reading: 0, read: 0, total: 0 }
 
   aboutToAppear() {

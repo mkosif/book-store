@@ -34,7 +34,4 @@ export class CacheService {
     return [];
   }
 
-  hasCachedBooks(): boolean {
-    return this.getCachedBooks().length > 0;
-  }
 }

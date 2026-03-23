@@ -113,6 +113,7 @@ struct HomePage {
       .height('100%')
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Center)
+      .padding({ top: 24, bottom: 24 })
       .backgroundColor('#000000')
     }
     .backgroundColor('#000000')

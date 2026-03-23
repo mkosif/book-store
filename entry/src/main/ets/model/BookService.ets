@@ -2,10 +2,9 @@ import { getHttp } from '../utils/RCP';
 import BookModel from './BookModel';
 import { RSPModel } from './RSPModel';
 import { volModel } from './volModel';
-import { getUrl, getBaseUrl } from '../utils/Constants';
+import { getUrl, getBaseUrl, getApiKey } from '../utils/Constants';
 import { CacheService } from './CacheService';
 
-const API_KEY = 'YOUR_GOOGLE_BOOKS_API_KEY_HERE';
 const FIELDS = 'items(volumeInfo/title,volumeInfo/pageCount,volumeInfo/imageLinks/smallThumbnail,volumeInfo/description,volumeInfo/categories,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/publisher,volumeInfo/previewLink,volumeInfo/language)';
 
 class BookService {
@@ -42,7 +41,7 @@ class BookService {
 
   static async searchBooks(uiContext: UIContext, query: string): Promise<BookModel[]> {
     const baseUrl = getBaseUrl(uiContext);
-    const url = `${baseUrl}volumes?q=${encodeURIComponent(query)}&fields=${FIELDS}&key=${API_KEY}`;
+    const url = `${baseUrl}volumes?q=${encodeURIComponent(query)}&fields=${FIELDS}&key=${getApiKey(uiContext)}`;
     try {
       const response = await getHttp(uiContext, url) ?? [];
       const rsp = response as RSPModel;

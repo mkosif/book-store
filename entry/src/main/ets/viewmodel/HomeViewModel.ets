@@ -3,16 +3,6 @@ import { BookViewModel } from './BookViewModel';
 
 @Observed
 export class HomeViewModel {
-  offsetX: number = 0
-  offsetY: number = 0
-  name: ResourceStr = $r('app.string.games')
-  private responses: ResourceStr[] = [
-    $r('app.string.noway'),
-    $r('app.string.choosebooks'),
-    $r('app.string.catchme'),
-    $r('app.string.nicetry'),
-    $r('app.string.oopss')
-  ]
   allBooks: BookModel[] = []
   currentBook: BookModel | null = null;
   private static _instance: HomeViewModel;
@@ -27,26 +17,12 @@ export class HomeViewModel {
     return HomeViewModel._instance;
   }
 
-  escape() {
-    this.offsetX = this.randomOffset(-60, 60)
-    this.offsetY = this.randomOffset(-70, 70)
-  }
-
   getBookOfDay(): BookModel | null {
     if (this.allBooks.length === 0) return null;
     const today = new Date();
     const dateHash = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
     const index = dateHash % this.allBooks.length;
     return this.allBooks[index];
-  }
-
-  randomOffset(min: number, max: number): number {
-    return (Date.now() % (max - min + 1)) + min;
-  }
-
-  getRandomResponse(): ResourceStr {
-    let index = Date.now() % this.responses.length;
-    return this.responses[index]
   }
 
   async fetchBooks(uiContext?: UIContext) {

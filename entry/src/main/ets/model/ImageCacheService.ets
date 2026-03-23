@@ -24,16 +24,9 @@ export class ImageCacheService {
     }
   }
 
-  private saveToStorage() {
-    AppStorage.setOrCreate('ImageCacheMap', JSON.stringify(this.cache));
-  }
 
   getImage(url: string): string {
     return this.cache[url] ?? url;
   }
 
-  cacheImage(url: string, localPath: string) {
-    this.cache[url] = localPath;
-    this.saveToStorage();
-  }
 }
