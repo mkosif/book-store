@@ -33,13 +33,13 @@ export class FavoritesService {
     AppStorage.setOrCreate(FAVORITES_KEY, JSON.stringify(this.favorites));
   }
 
-  isFavorite(title: string): boolean {
-    return this.favorites.some(b => b.title === title);
+  isFavorite(id: string): boolean {
+    return this.favorites.some(b => b.id === id);
   }
 
   toggleFavorite(book: BookModel) {
-    if (this.isFavorite(book.title)) {
-      this.favorites = this.favorites.filter(b => b.title !== book.title);
+    if (this.isFavorite(book.id)) {
+      this.favorites = this.favorites.filter(b => b.id !== book.id);
     } else {
       this.favorites.push(book);
     }

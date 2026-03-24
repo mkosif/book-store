@@ -46,12 +46,12 @@ export class ReadingStatusService {
     AppStorage.setOrCreate(READING_STATUS_KEY, JSON.stringify(pairs));
   }
 
-  getStatus(title: string): ReadingStatus {
-    return this.statusMap.get(title) ?? ReadingStatus.NONE;
+  getStatus(id: string): ReadingStatus {
+    return this.statusMap.get(id) ?? ReadingStatus.TO_READ;
   }
 
-  setStatus(title: string, status: ReadingStatus) {
-    this.statusMap.set(title, status);
+  setStatus(id: string, status: ReadingStatus) {
+    this.statusMap.set(id, status);
     this.save();
   }
 

@@ -36,7 +36,7 @@ export class BookHistoryService {
   }
 
   addToHistory(book: BookModel) {
-    const index = this.history.findIndex(b => b.title === book.title);
+    const index = this.history.findIndex(b => b.id === book.id);
     if (index > -1) {
       this.history.splice(index, 1);
     }

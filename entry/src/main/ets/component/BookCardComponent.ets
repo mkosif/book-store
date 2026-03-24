@@ -1,5 +1,3 @@
-import { ImageCacheService } from '../model/ImageCacheService'
-
 @Component
 export struct BookCardComponent {
   @Prop title: string
@@ -11,7 +9,7 @@ export struct BookCardComponent {
 
   build() {
     Row() {
-      Image(ImageCacheService.getInstance().getImage(this.image))
+      Image(this.image)
         .width(44)
         .height(56)
         .borderRadius(6)

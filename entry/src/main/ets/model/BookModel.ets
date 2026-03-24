@@ -1,4 +1,5 @@
 export default interface BookModel {
+  id: string;
   title: string;
   pageCount: number;
   image: string;

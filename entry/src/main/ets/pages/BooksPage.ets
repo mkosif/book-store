@@ -16,24 +16,15 @@ struct BooksPage {
   @Consume('mainStack') pathStack: NavPathStack;
 
   aboutToAppear() {
-    this.viewModel.fetchBooks(this.getUIContext())
+    if (this.viewModel.allBooks.length === 0) {
+      this.viewModel.fetchBooks(this.getUIContext())
+    }
   }
 
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
+        Blank().height(10)
 
         FilterComponent({
           categories: this.viewModel.categories,
@@ -52,7 +43,7 @@ struct BooksPage {
                 pageCount: book.pageCount,
                 categories: book.categories,
                 authors: book.authors,
-                readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
+                readingStatus: ReadingStatusService.getInstance().getStatus(book.id)
               })
               .margin({ bottom: 6 })
               .onClick(() => {

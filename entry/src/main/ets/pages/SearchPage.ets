@@ -31,20 +31,6 @@ struct SearchPage {
   build() {
     NavDestination() {
       Column() {
-        // Back button
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
-
         Row() {
           TextInput({ placeholder: 'Search...', text: this.query })
             .layoutWeight(1)
@@ -61,7 +47,7 @@ struct SearchPage {
             .padding({ left: 8 })
             .onClick(() => { this.search() })
         }
-        .padding({ left: 16, right: 16, bottom: 8 })
+        .padding({ left: 30, right: 30, top: 16, bottom: 8 })
         .width('100%')
 
         if (this.isLoading) {

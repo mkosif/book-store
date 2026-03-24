@@ -4,7 +4,6 @@ import { BookViewModel } from './BookViewModel';
 @Observed
 export class HomeViewModel {
   allBooks: BookModel[] = []
-  currentBook: BookModel | null = null;
   private static _instance: HomeViewModel;
 
   private constructor() {

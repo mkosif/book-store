@@ -18,23 +18,13 @@ struct BookHistoryPage {
     this.history = BookHistoryService.getInstance().getHistory();
   }
 
+  onPageShow() {
+    this.history = BookHistoryService.getInstance().getHistory();
+  }
+
   build() {
     NavDestination() {
       Column() {
-        // Back button
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
-
         if (this.history.length === 0) {
           Column() {
             Text('🕐').fontSize(32).margin({ bottom: 12 })
@@ -54,7 +44,7 @@ struct BookHistoryPage {
                   pageCount: book.pageCount,
                   categories: book.categories,
                   authors: book.authors,
-                  readingStatus: ReadingStatusService.getInstance().getStatus(book.title)
+                  readingStatus: ReadingStatusService.getInstance().getStatus(book.id)
                 })
                 .margin({ bottom: 6 })
                 .onClick(() => {

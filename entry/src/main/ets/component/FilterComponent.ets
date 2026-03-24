@@ -20,7 +20,7 @@ export struct FilterComponent {
             })
         }, (cat: string) => cat)
       }
-      .padding({ left: 12, right: 12 })
+      .padding({ left: 36, right: 36 })
     }
     .scrollable(ScrollDirection.Horizontal)
     .scrollBar(BarState.Off)

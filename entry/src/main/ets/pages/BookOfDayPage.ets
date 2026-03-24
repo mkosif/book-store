@@ -1,5 +1,4 @@
 import BookModel from '../model/BookModel';
-import { ImageCacheService } from '../model/ImageCacheService';
 
 @Builder
 export function BookOfDayPageBuilder() {
@@ -11,6 +10,7 @@ export function BookOfDayPageBuilder() {
 export struct BookOfDayPage {
   @Consume('mainStack') pathStack: NavPathStack;
   @State book: BookModel = {
+    id: '',
     title: '',
     pageCount: 0,
     image: '',
@@ -24,28 +24,15 @@ export struct BookOfDayPage {
   }
 
   aboutToAppear(): void {
+    if (this.pathStack.getParamByName('BookOfDayPage').length === 0) { this.pathStack.pop(); return; }
     this.book = this.pathStack.getParamByName('BookOfDayPage')[0] as BookModel
   }
 
   build() {
     NavDestination() {
       Column() {
-        // Back button
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
-
         Column() {
-          Image(ImageCacheService.getInstance().getImage(this.book.image))
+          Image(this.book.image)
             .height(90)
             .width(65)
             .borderRadius(8)

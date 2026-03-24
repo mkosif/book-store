@@ -18,19 +18,6 @@ struct StatsPage {
   build() {
     NavDestination() {
       Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(40).height(40)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(20)
-            .onClick(() => { this.pathStack.pop() })
-        }
-        .width('100%')
-        .padding({ left: 28, top: 12, bottom: 4 })
-
         Text('📊')
           .fontSize(28)
           .margin({ top: 8, bottom: 8 })
