@@ -64,6 +64,18 @@ entry/src/main/ets/
 |---|---EntryBackupAbility
    ```
 
+# Setup
+
+## API Key
+
+This project uses the [Google Books API](https://developers.google.com/books). The API key is not included in the repository.
+
+1. Copy the template file:
+   ```
+   cp secrets.json.example entry/src/main/resources/base/element/secrets.json
+   ```
+2. Open `secrets.json` and replace `YOUR_GOOGLE_BOOKS_API_KEY_HERE` with your own key.
+
 # Constraints and Restrictions
 
 ## Supported Devices

@@ -11,64 +11,112 @@ export function HomePageBuilder() {
 struct HomePage {
   @State viewModel: HomeViewModel = HomeViewModel.instance;
   @Consume('mainStack') pathStack: NavPathStack;
-  allBooks: BookModel[] = []
-  currentBook: BookModel | null = null;
+  @State isLoadingBookOfDay: boolean = false;
 
-  //reset the button when this page open
   onPageShow() {
-    this.viewModel.offsetX = 0
-    this.viewModel.offsetY = 0
-    this.viewModel.name = $r('app.string.games')
-    this.viewModel.fetchBooks()
+    this.viewModel.fetchBooks(this.getUIContext())
+  }
+
+  openBookOfDay() {
+    const book = this.viewModel.getBookOfDay();
+    if (book) {
+      this.pathStack.pushPath({ name: 'BookOfDayPage', param: book });
+      return;
+    }
+    this.isLoadingBookOfDay = true;
+    this.viewModel.fetchBooks(this.getUIContext()).then(() => {
+      this.isLoadingBookOfDay = false;
+      const loaded = this.viewModel.getBookOfDay();
+      if (loaded) {
+        this.pathStack.pushPath({ name: 'BookOfDayPage', param: loaded });
+      }
+    });
+  }
+
+  @Builder
+  navCard(icon: string, label: string, action: () => void) {
+    Column() {
+      Text(icon).fontSize(24)
+      Text(label)
+        .fontSize(10)
+        .fontColor('#CCCCCC')
+        .margin({ top: 4 })
+        .textAlign(TextAlign.Center)
+    }
+    .justifyContent(FlexAlign.Center)
+    .alignItems(HorizontalAlign.Center)
+    .width('100%')
+    .height(80)
+    .borderRadius(18)
+    .backgroundColor('#1C1C1C')
+    .onClick(action)
   }
 
   build() {
     NavDestination() {
       Column() {
-        Button($r('app.string.bookofday'))
-          .backgroundColor($r('app.color.pink'))
-          .margin({ bottom: 5 })
-          .onClick(async () => {
-            if (!this.viewModel.allBooks || this.viewModel.allBooks.length === 0) {
-              console.warn('Books not loaded yet');
-              await this.viewModel.fetchBooks(this.getUIContext());
+        Grid() {
+          GridItem() {
+            Column() {
+              if (this.isLoadingBookOfDay) {
+                LoadingProgress().width(28).height(28).color('#CCCCCC')
+              } else {
+                Text('📅').fontSize(24)
+                Text('Book of Day')
+                  .fontSize(10)
+                  .fontColor('#CCCCCC')
+                  .margin({ top: 4 })
+                  .textAlign(TextAlign.Center)
+              }
             }
-
-            if (!this.viewModel.allBooks || this.viewModel.allBooks.length === 0) {
-              console.error('Still no books available after fetch!');
-              return;
-            }
-            const randomIndex = new Date().getTime() % this.viewModel.allBooks.length;
-            this.currentBook = this.viewModel.allBooks[randomIndex];
-            console.info('Random Book:', JSON.stringify(this.currentBook));
-
-            this.pathStack?.pushPath({
-              name: 'BookOfDayPage',
-              param: this.currentBook
-            });
-          })
-
-        Button($r('app.string.books'))
-          .backgroundColor($r('app.color.green'))
-          .margin({ bottom: 5 })
-          .onClick(() => {
-            this.pathStack.pushPathByName('BooksPage', null)
-          })
-
-        Button(this.viewModel.name)
-          .backgroundColor($r('app.color.gray'))
-          .offset({ x: this.viewModel.offsetX, y: this.viewModel.offsetY })
-          .onTouch((event: TouchEvent) => {
-            if (event.type === TouchType.Down) {
-              this.viewModel.escape()
-              this.viewModel.name = this.viewModel.getRandomResponse()
-            }
-          })
+            .justifyContent(FlexAlign.Center)
+            .alignItems(HorizontalAlign.Center)
+            .width('100%')
+            .height(80)
+            .borderRadius(18)
+            .backgroundColor('#1C1C1C')
+            .onClick(() => { this.openBookOfDay() })
+          }
+          GridItem() {
+            this.navCard('📚', 'Books', () => {
+              this.pathStack.pushPathByName('BooksPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('🔍', 'Search', () => {
+              this.pathStack.pushPathByName('SearchPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('⭐', 'Favorites', () => {
+              this.pathStack.pushPathByName('FavoritesPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('🕐', 'History', () => {
+              this.pathStack.pushPathByName('BookHistoryPage', null)
+            })
+          }
+          GridItem() {
+            this.navCard('📊', 'Stats', () => {
+              this.pathStack.pushPathByName('StatsPage', null)
+            })
+          }
+        }
+        .columnsTemplate('1fr 1fr')
+        .columnsGap(10)
+        .rowsGap(10)
+        .width('72%')
+        .scrollBar(BarState.Off)
       }
-      .justifyContent(FlexAlign.Center)
       .width('100%')
       .height('100%')
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .padding({ top: 24, bottom: 24 })
+      .backgroundColor('#000000')
     }
+    .backgroundColor('#000000')
     .hideBackButton(true)
   }
 }

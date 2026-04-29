@@ -1,20 +1,9 @@
 import BookModel from '../model/BookModel';
-import BookService from '../model/BookService';
+import { BookViewModel } from './BookViewModel';
 
 @Observed
 export class HomeViewModel {
-  offsetX: number = 0
-  offsetY: number = 0
-  name: ResourceStr = $r('app.string.games')
-  private responses: ResourceStr[] = [
-    $r('app.string.noway'),
-    $r('app.string.choosebooks'),
-    $r('app.string.catchme'),
-    $r('app.string.nicetry'),
-    $r('app.string.oopss')
-  ]
   allBooks: BookModel[] = []
-  currentBook: BookModel | null = null;
   private static _instance: HomeViewModel;
 
   private constructor() {
@@ -27,31 +16,16 @@ export class HomeViewModel {
     return HomeViewModel._instance;
   }
 
-  escape() {
-    let newX = this.randomOffset(-60, 60)
-    let newY = this.randomOffset(-70, 70)
-  }
-
-  randomOffset(min: number, max: number): number {
-    return (Date.now() % (max - min + 1)) + min;
-  }
-
-  getRandomResponse(): ResourceStr {
-    let index = Date.now() % this.responses.length;
-    return this.responses[index]
+  getBookOfDay(): BookModel | null {
+    if (this.allBooks.length === 0) return null;
+    const today = new Date();
+    const dateHash = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+    const index = dateHash % this.allBooks.length;
+    return this.allBooks[index];
   }
 
   async fetchBooks(uiContext?: UIContext) {
-    if (!uiContext) {
-      console.error('UIContext is undefined. Cannot fetch books.');
-      return;
-    }
-
-    try {
-      this.allBooks = await BookService.getBooks(uiContext);
-      console.info('HomeViewModel Books:', JSON.stringify(this.allBooks, null, 3));
-    } catch (err) {
-      console.error('Failed to fetch books:', JSON.stringify(err));
-    }
+    await BookViewModel.instance.fetchBooks(uiContext);
+    this.allBooks = BookViewModel.instance.allBooks;
   }
 }

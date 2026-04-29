@@ -8,6 +8,8 @@
     "pages/SearchPage",
     "pages/FavoritesPage",
     "pages/BookHistoryPage",
-    "pages/StatsPage"
+    "pages/StatsPage",
+    "pages/RecommendPage",
+    "pages/GoalPage"
   ]
 }
