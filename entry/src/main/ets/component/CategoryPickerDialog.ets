@@ -4,7 +4,7 @@ export struct CategoryPickerDialog {
   categories: string[] = []
   initialIndex: number = 0
   onConfirm: (category: string) => void = () => {}
-  @State tempIndex: number = 0
+  private tempIndex: number = 0
 
   aboutToAppear() {
     this.tempIndex = this.initialIndex

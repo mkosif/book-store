@@ -17,7 +17,9 @@ struct SearchPage {
   @State hasSearched: boolean = false;
 
   async search() {
-    if (!this.query.trim()) return;
+    if (!this.query.trim()) {
+      return;
+    }
     this.isLoading = true;
     this.hasSearched = true;
     try {
@@ -81,7 +83,7 @@ struct SearchPage {
                 .onClick(() => {
                   this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
-              }, (book: BookModel) => `${book.title}${book.previewLink}`)
+              }, (book: BookModel) => book.id || book.previewLink || book.title)
             }
             .padding({ left: 12, right: 12, bottom: 20 })
           }

@@ -85,7 +85,7 @@ struct BooksPage {
                   this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
             }
-          }, (item: BookModel) => `${item.title}${item.previewLink}`)
+          }, (item: BookModel) => item.id || item.previewLink || item.title)
         }
         .width('100%')
         .layoutWeight(1)

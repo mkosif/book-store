@@ -8,19 +8,16 @@ function sessionConfig(uiContext: UIContext): rcp.SessionConfiguration {
 }
 
 export async function getHttp(uiContext: UIContext, url: string) {
-  const session = rcp.createSession(sessionConfig(uiContext))
   try {
-    const res = await session.get(url)
+    const session = rcp.createSession(sessionConfig(uiContext))
     try {
+      const res = await session.get(url)
       return res.toJSON()
-    } catch (e) {
-      console.error('RCP: failed to serialize response:', e)
-      throw new Error(`RCP serialization failed: ${JSON.stringify(e)}`)
+    } finally {
+      session.close()
     }
   } catch (e) {
     console.error('RCP: request failed:', e)
     throw new Error(`RCP request failed: ${JSON.stringify(e)}`)
-  } finally {
-    session.close()
   }
 }

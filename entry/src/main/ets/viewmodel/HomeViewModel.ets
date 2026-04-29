@@ -17,7 +17,9 @@ export class HomeViewModel {
   }
 
   getBookOfDay(): BookModel | null {
-    if (this.allBooks.length === 0) return null;
+    if (this.allBooks.length === 0) {
+      return null;
+    }
     const today = new Date();
     const dateHash = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
     const index = dateHash % this.allBooks.length;

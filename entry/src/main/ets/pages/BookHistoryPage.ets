@@ -50,7 +50,7 @@ struct BookHistoryPage {
                 .onClick(() => {
                   this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
-              }, (item: BookModel) => `${item.title}${item.previewLink}`)
+              }, (item: BookModel) => item.id || item.previewLink || item.title)
             }
             .padding({ left: 12, right: 12, top: 4, bottom: 20 })
           }

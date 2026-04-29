@@ -61,7 +61,9 @@ export class BookViewModel {
   }
 
   addBook(book: BookModel) {
-    if (this.allBooks.findIndex(b => b.id === book.id) >= 0) return;
+    if (this.allBooks.findIndex(b => b.id === book.id) >= 0) {
+      return;
+    }
     this.allBooks = [...this.allBooks, book];
     this.updateCategories();
     this.applyFilter();

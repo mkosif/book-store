@@ -1,7 +1,11 @@
 export function getBaseUrl(uiContext?: UIContext): string {
-  if (!uiContext){ return ''};
+  if (!uiContext) {
+    return '';
+  }
   const context = uiContext.getHostContext?.();
-  if (!context){ return ''};
+  if (!context) {
+    return '';
+  }
   try {
     const name = context.resourceManager.getStringSync($r('app.string.name').id);
     const baseUrl = context.resourceManager.getStringSync($r('app.string.baseurl').id);
@@ -12,9 +16,13 @@ export function getBaseUrl(uiContext?: UIContext): string {
 }
 
 export function getApiKey(uiContext?: UIContext): string {
-  if (!uiContext) { return ''; }
+  if (!uiContext) {
+    return '';
+  }
   const context = uiContext.getHostContext?.();
-  if (!context) { return ''; }
+  if (!context) {
+    return '';
+  }
   try {
     return context.resourceManager.getStringSync($r('app.string.api_key').id);
   } catch (e) {
@@ -23,9 +31,13 @@ export function getApiKey(uiContext?: UIContext): string {
 }
 
 export function getUrl(uiContext?: UIContext): string {
-  if (!uiContext){ return ''};
+  if (!uiContext) {
+    return '';
+  }
   const context = uiContext.getHostContext?.();
-  if (!context){ return ''};
+  if (!context) {
+    return '';
+  }
   try {
     const name = context.resourceManager.getStringSync($r('app.string.name').id);
     const urlPath = context.resourceManager.getStringSync($r('app.string.url').id);

@@ -56,7 +56,7 @@ struct FavoritesPage {
                 .onClick(() => {
                   this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
-              }, (book: BookModel) => `${book.title}${book.previewLink}`)
+              }, (book: BookModel) => book.id || book.previewLink || book.title)
             }
             .padding({ left: 12, right: 12, top: 8, bottom: 20 })
           }

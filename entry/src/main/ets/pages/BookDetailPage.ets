@@ -20,7 +20,10 @@ struct BookDetailPage {
   @State fromSearch: boolean = false
 
   aboutToAppear(): void {
-    if (this.pathStack.getParamByName('BookDetailPage').length === 0) { this.pathStack.pop(); return; }
+    if (this.pathStack.getParamByName('BookDetailPage').length === 0) {
+      this.pathStack.pop();
+      return;
+    }
     const param = this.pathStack.getParamByName('BookDetailPage')[0] as BookModel
     const idx = BookViewModel.instance.filteredBooks.findIndex(b => b.id === param.id)
     if (idx >= 0) {
@@ -53,7 +56,7 @@ struct BookDetailPage {
       Swiper() {
         ForEach(this.books, (book: BookModel) => {
           this.bookView(book)
-        }, (item: BookModel) => `${item.title}${item.previewLink}`)
+        }, (item: BookModel) => item.id || item.previewLink || item.title)
       }
       .index(this.currentBookIndex)
       .onChange((index: number) => {
@@ -71,9 +74,7 @@ struct BookDetailPage {
   @Builder
   bookView(book: BookModel) {
     Stack() {
-      // Centered content
       Column() {
-        // Top bar: back | status | fav
         Row() {
           Text('‹')
             .fontSize(26)
@@ -119,7 +120,6 @@ struct BookDetailPage {
         .alignItems(VerticalAlign.Center)
         .padding({ left: 36, right: 36, top: 16 })
 
-        // Book content
         Column() {
           Image(book.image)
             .height(80)

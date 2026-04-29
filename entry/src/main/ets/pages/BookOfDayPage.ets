@@ -24,7 +24,10 @@ struct BookOfDayPage {
   }
 
   aboutToAppear(): void {
-    if (this.pathStack.getParamByName('BookOfDayPage').length === 0) { this.pathStack.pop(); return; }
+    if (this.pathStack.getParamByName('BookOfDayPage').length === 0) {
+      this.pathStack.pop();
+      return;
+    }
     this.book = this.pathStack.getParamByName('BookOfDayPage')[0] as BookModel
   }
 
