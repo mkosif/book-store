@@ -34,21 +34,27 @@ struct SearchPage {
         Row() {
           TextInput({ placeholder: 'Search...', text: this.query })
             .layoutWeight(1)
-            .fontSize(12)
+            .fontSize(11)
             .fontColor('#FFFFFF')
-            .placeholderColor('#555555')
-            .backgroundColor('#1A1A1A')
-            .borderRadius(10)
+            .placeholderColor('#6A6A6A')
+            .backgroundColor(Color.Transparent)
             .onChange((value: string) => { this.query = value })
             .onSubmit(() => { this.search() })
 
           Text('🔍')
-            .fontSize(18)
-            .padding({ left: 8 })
+            .fontSize(14)
+            .fontColor('#FFFFFF')
+            .width(20)
+            .textAlign(TextAlign.Center)
             .onClick(() => { this.search() })
         }
-        .padding({ left: 30, right: 30, top: 16, bottom: 8 })
-        .width('100%')
+        .width('70%')
+        .height(36)
+        .alignItems(VerticalAlign.Center)
+        .backgroundColor('#1A1A1A')
+        .borderRadius(12)
+        .padding({ left: 10, right: 8 })
+        .margin({ top: 16, bottom: 8 })
 
         if (this.isLoading) {
           LoadingProgress()
@@ -85,6 +91,7 @@ struct SearchPage {
       }
       .width('100%')
       .height('100%')
+      .alignItems(HorizontalAlign.Center)
       .backgroundColor('#000000')
     }
     .hideTitleBar(true)
