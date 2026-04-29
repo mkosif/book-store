@@ -22,6 +22,19 @@ const FIELDS = [
 ].join('');
 
 class BookService {
+  private static errorMessage(error: Error): string {
+    if (error.message.includes('HTTP 429')) {
+      return 'Google Books API limit reached. Check the API key or wait before retrying.'
+    }
+    if (error.message.includes('HTTP 403')) {
+      return 'Google Books API rejected the request. Check API key permissions.'
+    }
+    if (error.message.includes('HTTP 400')) {
+      return 'Google Books API request is invalid. Check the API key and query.'
+    }
+    return `Google Books API error: ${error.message}`
+  }
+
   private static mapBooks(rsp: RSPModel): BookModel[] {
     return (rsp.items || []).map<BookModel>((i: volModel) => ({
       id: i.id || '',
@@ -43,14 +56,22 @@ class BookService {
     try {
       const response = await getHttp(uiContext, requestUrl) ?? [];
       const rsp = response as RSPModel;
+      if (!rsp.items || rsp.items.length === 0) {
+        throw new Error('Google Books API returned no books.')
+      }
       const books = BookService.mapBooks(rsp);
       if (books.length > 0) {
         CacheService.getInstance().saveBooks(books);
       }
       return books;
     } catch (e) {
-      console.error('BookService: network error, using cache:', e);
-      return CacheService.getInstance().getCachedBooks();
+      const cachedBooks = CacheService.getInstance().getCachedBooks();
+      if (cachedBooks.length > 0) {
+        return cachedBooks;
+      }
+      const error = e as Error;
+      console.error('BookService: network error:', error.message);
+      throw new Error(BookService.errorMessage(error));
     }
   }
 
@@ -60,10 +81,14 @@ class BookService {
     try {
       const response = await getHttp(uiContext, url) ?? [];
       const rsp = response as RSPModel;
+      if (!rsp.items || rsp.items.length === 0) {
+        throw new Error('Google Books API returned no search results.')
+      }
       return BookService.mapBooks(rsp);
     } catch (e) {
-      console.error('BookService: search failed:', e);
-      return [];
+      const error = e as Error;
+      console.error('BookService: search failed:', error.message);
+      throw new Error(BookService.errorMessage(error));
     }
   }
 }

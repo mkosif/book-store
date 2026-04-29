@@ -1,3 +1,5 @@
+import { statusBackgroundColor, statusTextColor } from '../utils/ReadingStatusStyle'
+
 @Component
 export struct BookCardComponent {
   @Prop title: string
@@ -33,8 +35,8 @@ export struct BookCardComponent {
         if (this.readingStatus && this.readingStatus !== 'None') {
           Text(this.readingStatus)
             .fontSize(9)
-            .fontColor('#FFFFFF')
-            .backgroundColor('#1E4DBF')
+            .fontColor(statusTextColor(this.readingStatus))
+            .backgroundColor(statusBackgroundColor(this.readingStatus))
             .borderRadius(4)
             .padding({ left: 5, right: 5, top: 1, bottom: 1 })
             .margin({ top: 4 })

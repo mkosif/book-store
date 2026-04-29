@@ -3,6 +3,7 @@ import { ReadingStatusService, ReadingStatus } from '../model/ReadingStatusServi
 import { FavoritesService } from '../model/FavoritesService';
 import { BookHistoryService } from '../model/BookHistoryService';
 import { BookViewModel } from '../viewmodel/BookViewModel';
+import { statusBackgroundColor, statusTextColor } from '../utils/ReadingStatusStyle';
 
 @Builder
 export function BookDetailPageBuilder() {
@@ -45,10 +46,27 @@ struct BookDetailPage {
   }
 
   cycleStatus(book: BookModel) {
-    const all: ReadingStatus[] = [ReadingStatus.NONE, ReadingStatus.TO_READ, ReadingStatus.READING, ReadingStatus.READ]
+    const all: ReadingStatus[] = [
+      ReadingStatus.NONE,
+      ReadingStatus.TO_READ,
+      ReadingStatus.READING,
+      ReadingStatus.READ
+    ]
     const next = all[(all.indexOf(this.readingStatus) + 1) % all.length]
     ReadingStatusService.getInstance().setStatus(book.id, next)
     this.readingStatus = next
+  }
+
+  private metaText(book: BookModel): string {
+    const category = book.categories && book.categories.length > 0 ? book.categories[0] : 'Book'
+    const year = book.publishedDate ? book.publishedDate.slice(0, 4) : ''
+    if (year && book.pageCount > 0) {
+      return `${category} · ${year} · ${book.pageCount} pages`
+    }
+    if (book.pageCount > 0) {
+      return `${category} · ${book.pageCount} pages`
+    }
+    return category
   }
 
   build() {
@@ -73,93 +91,124 @@ struct BookDetailPage {
 
   @Builder
   bookView(book: BookModel) {
-    Stack() {
-      Column() {
-        Row() {
-          Text('‹')
-            .fontSize(26)
-            .fontColor('#FFFFFF')
-            .width(36).height(36)
-            .textAlign(TextAlign.Center)
-            .backgroundColor('#444444')
-            .borderRadius(18)
-            .onClick(() => { this.pathStack.pop() })
-
-          if (this.fromSearch) {
-            Text('+ Add')
-              .fontSize(10)
-              .fontColor('#4A90E2')
-              .backgroundColor('#0D1A33')
-              .borderRadius(8)
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-              .onClick(() => {
-                BookViewModel.instance.addBook(book)
-                this.fromSearch = false
-              })
-          } else {
-            Text(this.readingStatus === ReadingStatus.NONE ? '— Status' : this.readingStatus)
-              .fontSize(10)
-              .fontColor('#4A90E2')
-              .backgroundColor('#0D1A33')
-              .borderRadius(8)
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-              .onClick(() => { this.cycleStatus(book) })
-          }
-
+    Column() {
+      Row() {
+        Column() {
           Text(this.isFavorite ? '❤️' : '🤍')
-            .fontSize(22)
-            .width(36).height(36)
+            .fontSize(18)
+            .width(36)
+            .height(30)
             .textAlign(TextAlign.Center)
             .onClick(() => {
               FavoritesService.getInstance().toggleFavorite(book)
               this.isFavorite = FavoritesService.getInstance().isFavorite(book.id)
             })
         }
-        .width('100%')
-        .justifyContent(FlexAlign.SpaceBetween)
-        .alignItems(VerticalAlign.Center)
-        .padding({ left: 36, right: 36, top: 16 })
+        .width(86)
+        .height(104)
+        .alignItems(HorizontalAlign.Center)
+        .justifyContent(FlexAlign.End)
 
         Column() {
           Image(book.image)
-            .height(80)
-            .width(60)
+            .height(84)
+            .width(64)
             .borderRadius(8)
             .objectFit(ImageFit.Cover)
+        }
+        .width(64)
+        .height(104)
+        .alignItems(HorizontalAlign.Center)
+        .justifyContent(FlexAlign.Start)
 
-          Text(book.title)
-            .fontSize(12)
-            .fontColor('#FFFFFF')
-            .fontWeight(FontWeight.Bold)
-            .textAlign(TextAlign.Center)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-            .padding({ left: 36, right: 36 })
-            .margin({ top: 10 })
-
-          if (book.authors && book.authors.length > 0) {
-            Text(book.authors[0])
-              .fontSize(10)
-              .fontColor('#888888')
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .padding({ left: 36, right: 36 })
-              .margin({ top: 4 })
+        Column() {
+          if (this.fromSearch) {
+            Text('+ Add')
+              .fontSize(11)
+              .fontColor('#4A90E2')
+              .fontWeight(FontWeight.Medium)
+              .width(68)
+              .height(28)
+              .textAlign(TextAlign.Center)
+              .backgroundColor('#0D1A33')
+              .borderRadius(12)
+              .padding({ left: 10, right: 10, top: 5, bottom: 5 })
+              .onClick(() => {
+                BookViewModel.instance.addBook(book)
+                this.fromSearch = false
+              })
+          } else {
+            Text(this.readingStatus === ReadingStatus.NONE ? 'Status' : this.readingStatus)
+              .fontSize(11)
+              .fontColor(statusTextColor(this.readingStatus))
+              .fontWeight(FontWeight.Medium)
+              .width(68)
+              .height(28)
+              .textAlign(TextAlign.Center)
+              .backgroundColor(statusBackgroundColor(this.readingStatus))
+              .borderRadius(12)
+              .padding({ left: 10, right: 10, top: 5, bottom: 5 })
+              .onClick(() => {
+                this.cycleStatus(book)
+              })
           }
         }
-        .alignItems(HorizontalAlign.Center)
-        .justifyContent(FlexAlign.Center)
-        .layoutWeight(1)
-        .padding({ bottom: 24 })
+        .width(86)
+        .height(104)
+        .alignItems(HorizontalAlign.Start)
+        .justifyContent(FlexAlign.End)
+        .padding({ left: 10 })
       }
-      .width('100%')
-      .height('100%')
-      .alignItems(HorizontalAlign.Center)
-      .justifyContent(FlexAlign.Start)
+      .width(236)
+      .height(110)
+      .justifyContent(FlexAlign.Center)
+      .alignItems(VerticalAlign.Center)
+      .margin({ top: 8 })
 
+      Text(book.title)
+        .fontSize(12)
+        .fontColor('#FFFFFF')
+        .fontWeight(FontWeight.Bold)
+        .lineHeight(16)
+        .textAlign(TextAlign.Center)
+        .maxLines(2)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .width('68%')
+        .margin({ top: 5 })
+
+      if (book.authors && book.authors.length > 0) {
+        Text(book.authors[0])
+          .fontSize(11)
+          .fontColor('#888888')
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .textAlign(TextAlign.Center)
+          .width('66%')
+          .margin({ top: 4 })
+      }
+
+      Text(this.metaText(book))
+        .fontSize(10)
+        .fontColor('#4A90E2')
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .textAlign(TextAlign.Center)
+        .width('68%')
+        .margin({ top: 5 })
+
+      Text(book.publisher || book.language.toUpperCase() || 'Book details')
+        .fontSize(10)
+        .fontColor('#666666')
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
+        .textAlign(TextAlign.Center)
+        .width('64%')
+        .margin({ top: 2 })
     }
     .width('100%')
     .height('100%')
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Start)
     .backgroundColor('#000000')
   }
 }

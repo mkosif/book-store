@@ -15,6 +15,7 @@ struct SearchPage {
   @State results: BookModel[] = [];
   @State isLoading: boolean = false;
   @State hasSearched: boolean = false;
+  @State errorMessage: string = '';
 
   async search() {
     if (!this.query.trim()) {
@@ -22,9 +23,12 @@ struct SearchPage {
     }
     this.isLoading = true;
     this.hasSearched = true;
+    this.errorMessage = '';
     try {
       this.results = await BookService.searchBooks(this.getUIContext(), this.query);
     } catch (e) {
+      const error = e as Error;
+      this.errorMessage = error.message;
       this.results = [];
     }
     this.isLoading = false;
@@ -38,14 +42,14 @@ struct SearchPage {
             .layoutWeight(1)
             .fontSize(11)
             .fontColor('#FFFFFF')
-            .placeholderColor('#6A6A6A')
+            .placeholderColor('#A8A8A8')
             .backgroundColor(Color.Transparent)
             .onChange((value: string) => { this.query = value })
             .onSubmit(() => { this.search() })
 
           Text('🔍')
             .fontSize(14)
-            .fontColor('#FFFFFF')
+            .fontColor('#E8F1FF')
             .width(20)
             .textAlign(TextAlign.Center)
             .onClick(() => { this.search() })
@@ -53,15 +57,23 @@ struct SearchPage {
         .width('70%')
         .height(36)
         .alignItems(VerticalAlign.Center)
-        .backgroundColor('#1A1A1A')
+        .backgroundColor('#242424')
+        .border({ width: 1, color: '#5A5A5A' })
         .borderRadius(12)
         .padding({ left: 10, right: 8 })
-        .margin({ top: 16, bottom: 8 })
+        .margin({ top: 26, bottom: 8 })
 
         if (this.isLoading) {
           LoadingProgress()
             .width(36).height(36)
             .color('#4A90E2')
+            .margin({ top: 40 })
+        } else if (this.errorMessage) {
+          Text(this.errorMessage)
+            .fontSize(11)
+            .fontColor('#FF6B6B')
+            .textAlign(TextAlign.Center)
+            .width('72%')
             .margin({ top: 40 })
         } else if (this.hasSearched && this.results.length === 0) {
           Text('No results')

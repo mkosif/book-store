@@ -8,6 +8,7 @@ export class BookViewModel {
   filteredBooks: BookModel[] = []
   categories: string[] = []
   selectedCategory: string = 'All'
+  lastError: string = ''
 
   private constructor() {
   }
@@ -26,12 +27,18 @@ export class BookViewModel {
     }
 
     try {
+      this.lastError = ''
       this.allBooks = await BookService.getBooks(uiContext);
       console.info('BookViewModel Books:', JSON.stringify(this.allBooks, null, 3))
       this.updateCategories();
       this.applyFilter();
     } catch (err) {
-      console.error('Failed to fetch books:', JSON.stringify(err))
+      const error = err as Error
+      this.lastError = error.message
+      this.allBooks = []
+      this.filteredBooks = []
+      this.categories = ['All']
+      console.error('Failed to fetch books:', error.message)
     }
   }
 

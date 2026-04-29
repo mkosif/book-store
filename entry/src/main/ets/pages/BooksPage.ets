@@ -70,25 +70,34 @@ struct BooksPage {
         .margin({ top: 18, bottom: 6 })
         .onClick(() => { this.openPicker() })
 
-        ArcList() {
-          ForEach(this.viewModel.filteredBooks, (book: BookModel) => {
-            ArcListItem() {
-              BookCardComponent({
-                image: book.image,
-                title: book.title,
-                pageCount: book.pageCount,
-                categories: book.categories,
-                authors: book.authors,
-                readingStatus: ReadingStatusService.getInstance().getStatus(book.id)
-              })
-                .onClick(() => {
-                  this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
+        if (this.viewModel.lastError) {
+          Text(this.viewModel.lastError)
+            .fontSize(11)
+            .fontColor('#FF6B6B')
+            .textAlign(TextAlign.Center)
+            .width('72%')
+            .margin({ top: 44 })
+        } else {
+          ArcList() {
+            ForEach(this.viewModel.filteredBooks, (book: BookModel) => {
+              ArcListItem() {
+                BookCardComponent({
+                  image: book.image,
+                  title: book.title,
+                  pageCount: book.pageCount,
+                  categories: book.categories,
+                  authors: book.authors,
+                  readingStatus: ReadingStatusService.getInstance().getStatus(book.id)
                 })
-            }
-          }, (item: BookModel) => item.id || item.previewLink || item.title)
+                  .onClick(() => {
+                    this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
+                  })
+              }
+            }, (item: BookModel) => item.id || item.previewLink || item.title)
+          }
+          .width('100%')
+          .layoutWeight(1)
         }
-        .width('100%')
-        .layoutWeight(1)
       }
       .width('100%')
       .height('100%')

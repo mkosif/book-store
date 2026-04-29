@@ -1,5 +1,6 @@
 import BookModel from '../model/BookModel';
 import { HomeViewModel } from '../viewmodel/HomeViewModel';
+import { BookViewModel } from '../viewmodel/BookViewModel';
 
 @Builder
 export function HomePageBuilder() {
@@ -10,6 +11,7 @@ export function HomePageBuilder() {
 @Component
 struct HomePage {
   @State viewModel: HomeViewModel = HomeViewModel.instance;
+  @State bookViewModel: BookViewModel = BookViewModel.instance;
   @Consume('mainStack') pathStack: NavPathStack;
   @State isLoadingBookOfDay: boolean = false;
 
@@ -29,6 +31,11 @@ struct HomePage {
       const loaded = this.viewModel.getBookOfDay();
       if (loaded) {
         this.pathStack.pushPath({ name: 'BookOfDayPage', param: loaded });
+      } else if (this.bookViewModel.lastError) {
+        this.getUIContext().getPromptAction().showToast({
+          message: this.bookViewModel.lastError,
+          duration: 3000
+        });
       }
     });
   }
