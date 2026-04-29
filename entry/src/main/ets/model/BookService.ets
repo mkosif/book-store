@@ -5,7 +5,21 @@ import { volModel } from './volModel';
 import { getUrl, getBaseUrl, getApiKey } from '../utils/Constants';
 import { CacheService } from './CacheService';
 
-const FIELDS = 'items(id,volumeInfo/title,volumeInfo/pageCount,volumeInfo/imageLinks/smallThumbnail,volumeInfo/description,volumeInfo/categories,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/publisher,volumeInfo/previewLink,volumeInfo/language)';
+const FIELDS = [
+  'items(',
+  'id',
+  ',volumeInfo/title',
+  ',volumeInfo/pageCount',
+  ',volumeInfo/imageLinks/smallThumbnail',
+  ',volumeInfo/description',
+  ',volumeInfo/categories',
+  ',volumeInfo/authors',
+  ',volumeInfo/publishedDate',
+  ',volumeInfo/publisher',
+  ',volumeInfo/previewLink',
+  ',volumeInfo/language',
+  ')'
+].join('');
 
 class BookService {
   private static mapBooks(rsp: RSPModel): BookModel[] {

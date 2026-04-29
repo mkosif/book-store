@@ -75,7 +75,7 @@ struct SearchPage {
                 .onClick(() => {
                   this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                 })
-              }, (book: BookModel) => book.title + book.previewLink)
+              }, (book: BookModel) => `${book.title}${book.previewLink}`)
             }
             .padding({ left: 12, right: 12, bottom: 20 })
           }

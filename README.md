@@ -1,5 +1,3 @@
-> **Note:** To access all shared projects, get information about environment setup, and view other guides, please visit [Explore-In-HMOS-Wearable Index](https://github.com/Explore-In-HMOS-Wearable/hmos-index).
-
 # Book Store
 
 This project is a wearable watch application built for **HarmonyOS NEXT** wearable devices, developed using **ArkTS**, designed to help users manage and explore their personal books collection.
@@ -70,11 +68,14 @@ entry/src/main/ets/
 
 This project uses the [Google Books API](https://developers.google.com/books). The API key is not included in the repository.
 
-1. Copy the template file:
-   ```
-   cp secrets.json.example entry/src/main/resources/base/element/secrets.json
-   ```
-2. Open `secrets.json` and replace `YOUR_GOOGLE_BOOKS_API_KEY_HERE` with your own key.
+Open `entry/src/main/resources/base/element/string.json` and set the `api_key` value:
+
+```json
+{
+  "name": "api_key",
+  "value": "YOUR_GOOGLE_BOOKS_API_KEY_HERE"
+}
+```
 
 # Constraints and Restrictions
 

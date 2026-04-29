@@ -7,7 +7,7 @@ export function BookOfDayPageBuilder() {
 
 @Entry
 @Component
-export struct BookOfDayPage {
+struct BookOfDayPage {
   @Consume('mainStack') pathStack: NavPathStack;
   @State book: BookModel = {
     id: '',

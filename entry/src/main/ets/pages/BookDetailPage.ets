@@ -53,7 +53,7 @@ struct BookDetailPage {
       Swiper() {
         ForEach(this.books, (book: BookModel) => {
           this.bookView(book)
-        }, (item: BookModel) => item.title + item.previewLink)
+        }, (item: BookModel) => `${item.title}${item.previewLink}`)
       }
       .index(this.currentBookIndex)
       .onChange((index: number) => {
