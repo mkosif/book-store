@@ -89,6 +89,7 @@ struct BooksPage {
                   authors: book.authors,
                   readingStatus: ReadingStatusService.getInstance().getStatus(book.id)
                 })
+                  .margin({ bottom: 4 })
                   .onClick(() => {
                     this.pathStack.pushPath({ name: 'BookDetailPage', param: book })
                   })
